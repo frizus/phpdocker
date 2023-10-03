@@ -1,0 +1,105 @@
+version: "3"
+
+services:
+    php:
+        build:
+            context: "./php"
+            dockerfile: Dockerfile
+            args:
+                - APP_USER_UID=${APP_USER_UID}
+                - APP_GROUP_GID=${APP_GROUP_GID}
+                - APP_USER=www-data
+                - APP_GROUP=www-data
+        working_dir: /var/www/app
+        volumes:
+            - app-volume:/var/www/app
+            - php-logs:/var/log/php
+        links:
+            - db
+        restart: "no"
+        tty: true
+        networks:
+            - app-network
+    webserver:
+        build:
+            context: "./nginx"
+            dockerfile: Dockerfile
+            args:
+                - APP_USER_UID=${APP_USER_UID}
+                - APP_GROUP_GID=${APP_GROUP_GID}
+                - APP_USER=www-data
+                - APP_GROUP=www-data
+        volumes:
+            - app-volume:/var/www/app
+            - webserver-logs:/var/log/webserver
+        links:
+            - php
+        ports:
+            - '${INTERFACE}:8080:80'
+        networks:
+            - app-network
+        restart: "no"
+        tty: true
+    db:
+        build:
+            context: "./mysql"
+            dockerfile: Dockerfile
+            args:
+                - APP_USER_UID=${APP_USER_UID}
+                - APP_GROUP_GID=${APP_GROUP_GID}
+                - APP_USER=www-data
+                - APP_GROUP=www-data
+        volumes:
+            - db-logs:/var/log/mysql
+            - db:/var/lib/mysql
+        ports:
+            - '${INTERFACE}:3306:3306'
+        environment:
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+        restart: "no"
+        tty: true
+        networks:
+            - app-network
+
+networks:
+    app-network:
+        driver: bridge
+        ipam:
+            driver: default
+            config:
+                - subnet: ${SUBNET}
+
+volumes:
+    app-volume:
+        driver: local
+        driver_opts:
+            type: none
+            o: bind
+            device: ./${SITE_DIR}
+    php-logs:
+        driver: local
+        driver_opts:
+            type: none
+            o: bind
+            device: ./logs/php
+    webserver-logs:
+        driver: local
+        driver_opts:
+            type: none
+            o: bind
+            device: ./logs/webserver
+    db-logs:
+        driver: local
+        driver_opts:
+            type: none
+            o: bind
+            device: ./logs/mysql
+    db:
+        driver: local
+        driver_opts:
+            type: none
+            o: bind
+            device: ./db
