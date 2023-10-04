@@ -35,7 +35,7 @@ services:
         links:
             - php
         ports:
-            - '${INTERFACE}:8080:80'
+            - '${INTERFACE}:80:80'
         networks:
             - app-network
         restart: "no"
