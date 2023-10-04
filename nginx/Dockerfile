@@ -5,6 +5,8 @@ ARG APP_GROUP
 ARG APP_GROUP_GID
 ARG APP_USER_UID
 COPY conf/nginx.conf /etc/nginx/
+COPY conf/upstream.conf /etc/nginx/conf.d/
+COPY conf/default.conf /etc/nginx/conf.d/
 
 #RUN groupmod -g $APP_GROUP_GID $APP_GROUP && \
 #    usermod -u $APP_USER_UID $APP_USER
