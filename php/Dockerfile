@@ -31,7 +31,11 @@ RUN groupmod -g $APP_GROUP_GID $APP_GROUP && \
     #groupadd -g $APP_GROUP_GID $APP_GROUP && \
     #useradd -u $APP_USER_UID -ms /bin/bash -g $APP_GROUP $APP_USER && \
     mkdir $APP_PATH && \
-    chown $APP_USER:$APP_GROUP $APP_PATH
+    chown $APP_USER:$APP_GROUP $APP_PATH && \
+    chown $APP_USER:$APP_GROUP $APP_PATH/../
+
+# https://getcomposer.org/doc/00-intro.md#docker-image
+COPY --from=composer/composer:2.6.4-bin /composer /usr/local/bin
 
 COPY ./php.ini /etc/php/8.1/fpm/php.ini
 COPY ./php.ini /etc/php/8.1/cli/php.ini
