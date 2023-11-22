@@ -15,6 +15,7 @@ RUN apt-get update &&  \
     libfreetype6-dev \
     libonig-dev \
     libzip-dev \
+    libpq-dev \
     locales \
     zip \
     jpegoptim optipng pngquant gifsicle \
@@ -22,7 +23,7 @@ RUN apt-get update &&  \
     git \
     curl && \
     apt-get clean && rm -rf /var/lib/apt/lists/* && \
-    docker-php-ext-install pdo_mysql mbstring zip exif pcntl
+    docker-php-ext-install pdo pdo_pgsql pgsql mbstring zip exif pcntl
 
 RUN docker-php-ext-configure gd
 

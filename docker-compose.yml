@@ -41,24 +41,18 @@ services:
         restart: "no"
         tty: true
     db:
-        build:
-            context: "./mysql"
-            dockerfile: Dockerfile
-            args:
-                - APP_USER_UID=${APP_USER_UID}
-                - APP_GROUP_GID=${APP_GROUP_GID}
-                - APP_USER=www-data
-                - APP_GROUP=www-data
+        image: postgres:16.1
+# https://stackoverflow.com/questions/41637505/how-to-persist-data-in-a-dockerized-postgres-database-using-volumes
+# https://stackoverflow.com/questions/48862633/how-to-setup-volume-for-postgres-log-folder-permission-denied-error
         volumes:
-            - db-logs:/var/log/mysql
-            - db:/var/lib/mysql
+            - db:/var/lib/postgresql/data
+            - db-logs:/logs
         ports:
-            - '${INTERFACE}:3306:3306'
+            - '${INTERFACE}:5432:5432'
         environment:
-            MYSQL_DATABASE: ${MYSQL_DATABASE}
-            MYSQL_USER: ${MYSQL_USER}
-            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            POSTGRES_PASSWORD: ${DB_PASSWORD}
+            POSTGRES_USER: ${DB_USER}
+            POSTGRES_DB: ${DB_NAME}
         restart: "no"
         tty: true
         networks:
@@ -96,7 +90,7 @@ volumes:
         driver_opts:
             type: none
             o: bind
-            device: ./logs/mysql
+            device: ./logs/postgres
     db:
         driver: local
         driver_opts:
