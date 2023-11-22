@@ -38,8 +38,9 @@ RUN groupmod -g $APP_GROUP_GID $APP_GROUP && \
 # https://getcomposer.org/doc/00-intro.md#docker-image
 COPY --from=composer/composer:2.6.4-bin /composer /usr/local/bin
 
-COPY ./php.ini /etc/php/8.1/fpm/php.ini
-COPY ./php.ini /etc/php/8.1/cli/php.ini
+COPY ./php.ini /usr/local/etc/php/php.ini
+#COPY ./php.ini /etc/php/8.1/fpm/php.ini
+#COPY ./php.ini /etc/php/8.1/cli/php.ini
 
 USER $APP_USER
 

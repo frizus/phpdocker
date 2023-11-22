@@ -20,6 +20,14 @@ services:
         tty: true
         networks:
             - app-network
+    node:
+        build: ./node
+        working_dir: /var/www/app
+        volumes:
+            - app-volume:/var/www/app
+        networks:
+            - app-network
+        restart: "no"
     webserver:
         build:
             context: "./nginx"
