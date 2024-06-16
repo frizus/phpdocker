@@ -1,0 +1,5 @@
+/.idea
+/app
+/.env
+/db-data
+/logs

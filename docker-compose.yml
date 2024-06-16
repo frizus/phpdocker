@@ -1,0 +1,41 @@
+services:
+  php:
+    build:
+      context: "./php"
+      dockerfile: Dockerfile
+      args:
+        - SITE_EDITOR_GID=${SITE_EDITOR_GID}
+        - DOCKER_USER_UID_GID=${DOCKER_USER_UID_GID}
+        - DOCKER_WEB_USER=${DOCKER_WEB_USER}
+        - PHP_VERSION=${PHP_VERSION}
+        - NODEJS_VERSION=${NODEJS_VERSION}
+    volumes_from:
+      - disk
+    restart: "no"
+    tty: true
+    stdin_open: true
+  nginx:
+    build:
+      context: "./nginx"
+      dockerfile: Dockerfile
+      args:
+        - SITE_EDITOR_GID=${SITE_EDITOR_GID}
+        - DOCKER_USER_UID_GID=${DOCKER_USER_UID_GID}
+        - DOCKER_WEB_USER=${DOCKER_WEB_USER}
+        - NGINX_PORT=${NGINX_PORT}
+        - NGINX_VERSION=${NGINX_VERSION}
+    volumes_from:
+      - disk
+    ports:
+      - "8080:${NGINX_PORT}"
+    environment:
+      - NGINX_PORT=${NGINX_PORT}
+    tty: true
+    stdin_open: true
+  disk:
+    image: ubuntu:24.04
+    volumes:
+      - ./app:/home/docker_user/app
+    # https://www.baeldung.com/ops/docker-compose-multiple-commands#1-using-the-ampamp-operator
+    command: /bin/bash -c "chgrp ${SITE_EDITOR_GID} /home/docker_user/app; chmod 2775 /home/docker_user/app"
+    restart: "no"
