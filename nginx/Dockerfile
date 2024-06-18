@@ -2,6 +2,8 @@ ARG NGINX_VERSION=1.27.0
 
 FROM nginx:${NGINX_VERSION}-perl
 
+SHELL ["/bin/bash", "-i", "-c"]
+
 COPY nginx.conf /etc/nginx/nginx.conf
 
 ARG SITE_EDITOR_GID=830
