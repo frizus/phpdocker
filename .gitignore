@@ -2,4 +2,4 @@
 /app
 /.env
 /db-data
-/logs
+/log

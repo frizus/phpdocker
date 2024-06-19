@@ -9,8 +9,14 @@ services:
         - DOCKER_WEB_USER=${DOCKER_WEB_USER}
         - PHP_VERSION=${PHP_VERSION}
         - NODEJS_VERSION=${NODEJS_VERSION}
+        - PROJECT_ROOT=${PROJECT_ROOT}
     volumes_from:
       - disk
+    command: /bin/bash -i -c "
+      php-fpm
+      "
+    ports:
+      - ":9000"
     restart: "no"
     tty: true
     stdin_open: true
@@ -22,20 +28,32 @@ services:
         - SITE_EDITOR_GID=${SITE_EDITOR_GID}
         - DOCKER_USER_UID_GID=${DOCKER_USER_UID_GID}
         - DOCKER_WEB_USER=${DOCKER_WEB_USER}
-        - NGINX_PORT=${NGINX_PORT}
         - NGINX_VERSION=${NGINX_VERSION}
+        - NGINX_PORT=${NGINX_PORT}
+        - NGINX_HOST=${NGINX_HOST}
+        - PROJECT_ROOT=${PROJECT_ROOT}
     volumes_from:
       - disk
+    command: [nginx, "-g", "daemon off;"]
     ports:
       - "8080:${NGINX_PORT}"
     environment:
+      - NGINX_HOST=${NGINX_HOST}
       - NGINX_PORT=${NGINX_PORT}
+    depends_on:
+      - php
     tty: true
     stdin_open: true
   disk:
     image: ubuntu:24.04
     volumes:
-      - ./app:/home/docker_user/app
+      - ./app:${PROJECT_ROOT}
+      - ./log/nginx:/var/log/nginx
     # https://www.baeldung.com/ops/docker-compose-multiple-commands#1-using-the-ampamp-operator
-    command: /bin/bash -c "chgrp ${SITE_EDITOR_GID} /home/docker_user/app; chmod 2775 /home/docker_user/app"
+    command: /bin/bash -c "
+      chgrp ${SITE_EDITOR_GID} ${PROJECT_ROOT};
+      chmod 2775 ${PROJECT_ROOT};
+      chgrp ${SITE_EDITOR_GID} /var/log/nginx;
+      chmod 2775 /var/log/nginx;
+      "
     restart: "no"
