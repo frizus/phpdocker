@@ -13,6 +13,18 @@ copy-env:
 down:
 	docker-compose stop || true
 
+build-php:
+	docker-compose build php
+
+rebuild-php:
+	docker-compose build --no-cache php
+
+build-nginx:
+	docker-compose build nginx
+
+rebuild-nginx:
+	docker-compose build --no-cache nginx
+
 start: run
 
 launch: run

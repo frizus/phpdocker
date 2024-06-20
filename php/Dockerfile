@@ -9,7 +9,7 @@ RUN apt-get -y update && \
 ARG SITE_EDITOR_GID=830
 ARG DOCKER_USER_UID_GID=1100
 ARG DOCKER_WEB_USER=101
-ARG PHP_VERISON=8.3.8
+ARG PHP_VERSION=8.3.8
 ARG NVM_VERSION=v0.39.7
 ARG NODEJS_VERSION=v22.3.0
 ARG PROJECT_ROOT
@@ -42,8 +42,8 @@ RUN /home/docker_user/.phpenv/plugins/php-build/install-dependencies.sh
 
 USER docker_user
 
-RUN phpenv install ${PHP_VERISON} && \
-    phpenv global ${PHP_VERISON}
+RUN phpenv install ${PHP_VERSION} && \
+    phpenv global ${PHP_VERSION}
 
 ENV PROJECT_ROOT ${PROJECT_ROOT}
 
@@ -72,3 +72,5 @@ export NVM_DIR=\"/home/docker_user/.nvm\"\n\
 
 RUN nvm install ${NODEJS_VERSION} && \
 	npm install -g yarn
+
+COPY ${PHP_VERSION} /home/docker_user/.phpenv/versions/${PHP_VERSION}/etc/

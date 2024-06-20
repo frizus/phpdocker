@@ -13,7 +13,7 @@ services:
     volumes_from:
       - disk
     command: /bin/bash -i -c "
-      php-fpm
+      php-fpm -F
       "
     ports:
       - ":9000"
@@ -54,6 +54,8 @@ services:
       chgrp ${SITE_EDITOR_GID} ${PROJECT_ROOT};
       chmod 2775 ${PROJECT_ROOT};
       chgrp ${SITE_EDITOR_GID} /var/log/nginx;
-      chmod 2775 /var/log/nginx;
+      find /var/log/nginx -type d -exec chmod g+rwx -- {} +;
+      find /var/log/nginx -type f -exec chmod g+rw -- {} +;
+      find /var/log/nginx -type f -exec chgrp ${SITE_EDITOR_GID} -- {} +;
       "
     restart: "no"

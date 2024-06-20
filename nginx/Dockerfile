@@ -4,6 +4,12 @@ FROM nginx:${NGINX_VERSION}-perl
 
 SHELL ["/bin/bash", "-i", "-c"]
 
+RUN echo -e "\n\
+umask 002\n\
+\n" | tee -a /etc/profile.d/umask.sh
+
+SHELL ["/bin/bash", "-i", "-c"]
+
 COPY nginx.conf /etc/nginx/nginx.conf
 
 ARG SITE_EDITOR_GID=830
