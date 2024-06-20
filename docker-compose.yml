@@ -17,6 +17,10 @@ services:
       "
     ports:
       - ":9000"
+    environment:
+      - PHP_IDE_CONFIG=serverName=xdebug-server
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     restart: "no"
     tty: true
     stdin_open: true
@@ -49,6 +53,7 @@ services:
     volumes:
       - ./app:${PROJECT_ROOT}
       - ./log/nginx:/var/log/nginx
+      - ./log/php:/var/log/php/
     # https://www.baeldung.com/ops/docker-compose-multiple-commands#1-using-the-ampamp-operator
     command: /bin/bash -c "
       chgrp ${SITE_EDITOR_GID} ${PROJECT_ROOT};
@@ -57,5 +62,9 @@ services:
       find /var/log/nginx -type d -exec chmod g+rwx -- {} +;
       find /var/log/nginx -type f -exec chmod g+rw -- {} +;
       find /var/log/nginx -type f -exec chgrp ${SITE_EDITOR_GID} -- {} +;
+      chgrp ${SITE_EDITOR_GID} /var/log/php;
+      find /var/log/php -type d -exec chmod g+rwx -- {} +;
+      find /var/log/php -type f -exec chmod g+rw -- {} +;
+      find /var/log/php -type f -exec chgrp ${SITE_EDITOR_GID} -- {} +;
       "
     restart: "no"

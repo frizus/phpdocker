@@ -1,5 +1,24 @@
 Используется [phpenv](https://github.com/phpenv/phpenv)
 
+
+### Настройка xdebug
+
+https://habr.com/ru/articles/712670/
+
+В шаге 2:
+
+* В `General/PHP executable` указать: `/home/docker_user/.phpenv/shims/php`
+
+В шаге 3:
+
+* В `Name` указать: `xdebug-server` 
+* в `Use path mappings` директории `app`
+указать `Absolute path on the server`: `/home/docker_user/app` (это значение по умолчанию для `PROJECT_ROOT` из `.env`)
+
+
+Шаги 6, 7 пропустить 
+
+
 ### Настройка php
 
 ```bash
@@ -27,6 +46,10 @@ make build-php
 # Запустить build php-контейнера без кеша
 make rebuild-php
 ```
+
+Изменения добавлены в дефолтном php `8.3.8`:
+* `php-fpm.d/www.conf`: `listen = 127.0.0.1:9000` заменен на `listen = 9000`
+* `conf.d/xdebug.ini`
 
 Если нужно сложнее, настраивайте вручную, подключаясь к контейнеру
 
