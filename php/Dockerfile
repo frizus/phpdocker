@@ -13,6 +13,7 @@ ARG PHP_VERSION=8.3.8
 ARG NVM_VERSION=v0.39.7
 ARG NODEJS_VERSION=v22.3.0
 ARG PROJECT_ROOT
+ARG PUBLIC_ROOT
 
 RUN groupadd -g ${SITE_EDITOR_GID} site_editor && \
 	useradd -Um -u ${DOCKER_USER_UID_GID} -G site_editor docker_user && \

@@ -10,6 +10,7 @@ services:
         - PHP_VERSION=${PHP_VERSION}
         - NODEJS_VERSION=${NODEJS_VERSION}
         - PROJECT_ROOT=${PROJECT_ROOT}
+        - PUBLIC_ROOT=${PUBLIC_ROOT}
     volumes_from:
       - disk
     command: /bin/bash -i -c "
@@ -36,6 +37,7 @@ services:
         - NGINX_PORT=${NGINX_PORT}
         - NGINX_HOST=${NGINX_HOST}
         - PROJECT_ROOT=${PROJECT_ROOT}
+        - PUBLIC_ROOT=${PUBLIC_ROOT}
     volumes_from:
       - disk
     command: [nginx, "-g", "daemon off;"]
