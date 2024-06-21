@@ -11,7 +11,9 @@ https://habr.com/ru/articles/712670/
 
 В шаге 3:
 
-* В `Name` указать: `xdebug-server` 
+* В `Host` указать `localhost`
+* В `Port` указать `9001`
+* В `Name` указать `xdebug-server` 
 * в `Use path mappings` директории `app`
 указать `Absolute path on the server`: `/home/docker_user/app` (это значение по умолчанию для `PROJECT_ROOT` из `.env`)
 
