@@ -7,6 +7,14 @@ build: copy-env
 build-no-cache: copy-env
 	docker-compose build --no-cache
 
+download-app-and-run-setup:
+	docker-compose run --rm php bash -i -c "\
+	git clone https://github.com/frizus/php-test-work1.git ./; \
+	make setup"
+
+test:
+	docker-compose run --rm php bash -i -c "make test"
+
 copy-env:
 	cp -n .env.default .env || true
 
@@ -25,6 +33,8 @@ build-nginx:
 rebuild-nginx:
 	docker-compose build --no-cache nginx
 
+setup: down build download-app-and-run-setup
+
 start: run
 
 launch: run
@@ -32,3 +42,5 @@ launch: run
 compose: run
 
 up: run
+
+.PHONY: test

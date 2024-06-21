@@ -1,3 +1,20 @@
+# Установка для php-test-work1
+
+https://github.com/frizus/php-test-work1
+
+```sh
+git clone -b for-php-test-work1 https://github.com/frizus/phpdocker.git php-test-work1/
+cd php-test-work1
+make setup
+make test # запускает тесты
+make run # запускает сервер на http://localhost:8080
+```
+
+Сайт находится в папке `app/`
+
+
+## PHP
+
 Используется [phpenv](https://github.com/phpenv/phpenv)
 
 
